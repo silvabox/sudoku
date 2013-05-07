@@ -1,12 +1,4 @@
 module Sudoku
-  def self.solve(puzzle)
-
-  end
-
-  def self.scan(puzzle)
-
-  end
-
   def self.row_index(cell_index)
     cell_index / 9
   end
@@ -39,7 +31,7 @@ module Sudoku
     
     # If we solved it with logic, return the solved puzzle.
     return puzzle if row_with_min_possible_values == nil
-    # Otherwise, try each of the values in p for cell [r,c].
+    # Otherwise, try each of the values in possible_values for cell [r,c].
     # Since we're picking from a set of possible values, the guess leaves
     # the puzzle in a valid state. The guess will either lead to a solution
     # or to an impossible puzzle. We'll know we have an impossible

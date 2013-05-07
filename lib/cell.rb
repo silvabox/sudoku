@@ -1,11 +1,13 @@
-class Cell
-  attr_accessor :value
+module Sudoku
+  class Cell
+    attr_accessor :value
 
-  def initialize(value)
-    @value = value
-  end
+    def initialize(value)
+      @value = value
+    end
 
-  def to_s
-    value
+    def to_s
+      value
+    end
   end
 end
