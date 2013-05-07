@@ -66,4 +66,16 @@ describe Sudoku do
       puts "\n#{puzzle}"
     end
   end
+
+  context 'given a very difficult puzzle' do
+    it 'should solve the puzzle' do
+      puzzle = Sudoku::Puzzle.new '800000000003600000070090200050007000000045700000100030001000068008500010090000400'
+
+      puts "\n#{puzzle}"
+      
+      expect { Sudoku.solve(puzzle) }.to_not raise_error
+
+      puts "\n#{puzzle}"
+    end
+  end
 end

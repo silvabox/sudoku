@@ -1,9 +1,27 @@
 module Sudoku
   class Cell
-    attr_accessor :value
 
     def initialize(value)
       @value = value
+      @guess = false
+    end
+
+    def guess?
+      @guess
+    end
+
+    def guess(value)
+      @value = value
+      @guess = true
+    end
+
+    def value
+      @value
+    end
+
+    def value=(value)
+      @value = value
+      @guess = false
     end
 
     def to_s

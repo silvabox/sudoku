@@ -61,7 +61,7 @@ module Sudoku
     def to_s
       str = "-----------------\n"
       @cells.each_with_index do |cell, i|
-        str += cell.value
+        str += cell.value == '0' ? ' ' : cell.value
         str += ' | ' if i % 3 == 2
         str += "\n" if i % 9 == 8
         str += "-----------------\n" if i % 27 == 26
@@ -88,8 +88,8 @@ module Sudoku
       numbers = grid_def.chars.to_a
 
       @cells = []
-      numbers.each_with_index do |number, i|
-        cell = Cell.new(number)
+      numbers.each_with_index do |value, i|
+        cell = Cell.new(value)
 
         row = Sudoku.row_index(i)
         column = Sudoku.column_index(i)
