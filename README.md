@@ -1,8 +1,6 @@
-minitest
-========
+Sudoku
+======
 
-An example of Minitest to start getting you used to TDD
+This is a Sudoku solver created as an example for Makers Academy.
 
-Fork this repo, add your classes to the lib folder, and start writing tests. 
-
-Remember you can run Guard by typing `guard` from the terminal in your project folder
+It is adapted from the example given in The Ruby Programming Language By David Flanagan and Yukihiro Matsumoto, O'Reilly Media, January 2008
