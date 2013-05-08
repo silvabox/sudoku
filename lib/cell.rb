@@ -24,6 +24,10 @@ module Sudoku
       @guess = false
     end
 
+    def unknown?
+      return value == '0'
+    end
+
     def to_s
       value
     end

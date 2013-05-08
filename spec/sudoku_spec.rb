@@ -61,7 +61,9 @@ describe Sudoku do
     it 'should solve the puzzle' do
       puzzle = Sudoku::Puzzle.new '003020600900305001001806400008102900700000008006708200002609500800203009005010300'
 
-      expect { Sudoku.solve(puzzle) }.to_not raise_error
+      puts "\n#{puzzle}"
+      
+      expect { puzzle = Sudoku.solve(puzzle) }.to_not raise_error
 
       puts "\n#{puzzle}"
     end
@@ -72,8 +74,8 @@ describe Sudoku do
       puzzle = Sudoku::Puzzle.new '800000000003600000070090200050007000000045700000100030001000068008500010090000400'
 
       puts "\n#{puzzle}"
-      
-      expect { Sudoku.solve(puzzle) }.to_not raise_error
+
+      expect { puzzle = Sudoku.solve(puzzle) }.to_not raise_error
 
       puts "\n#{puzzle}"
     end

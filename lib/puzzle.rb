@@ -1,10 +1,11 @@
-require 'sudoku'
-require 'cell'
+require_relative 'sudoku'
+require_relative 'cell'
+require_relative 'possibility'
 
 module Sudoku
   class Puzzle
     def initialize(grid_def)
-      @rows, @columns, @boxes, @cells = [], [], []
+      @cells = []
 
       build_grid grid_def
     end
@@ -33,7 +34,7 @@ module Sudoku
 
     def each_unknown
       @cells.each_with_index do |cell, i|
-        next unless cell.value == '0'
+        next unless cell.unknown?
         
         row = Sudoku.row_index(i)
         column = Sudoku.column_index(i)
@@ -49,12 +50,10 @@ module Sudoku
 
     def dup
       copy = super # Make a shallow copy by calling Object.dup
-      # Make a new copy of the internal data
-      @cells = @cells.dup
-      @rows = @rows.dup
-      @columns = @columns.dup
-      @boxes = @boxes.dup
-      
+      # Make a new copy of the internal data, known cells do not need to be duplicated
+      @cells = @cells.map { |cell| cell.unknown? ? cell.dup : cell }
+      build_rows_columns_and_boxes
+
       copy # Return the copied object
     end
 
@@ -72,30 +71,30 @@ module Sudoku
     private
 
     def row_values(row)
-      @rows[row].reject { |cell| cell.value == '0' }.map { |cell| cell.value }
+      @rows[row].reject { |cell| cell.unknown? }.map { |cell| cell.value }
     end
 
     def column_values(column)
-      @columns[column].reject { |cell| cell.value == '0' }.map { |cell| cell.value }
-
+      @columns[column].reject { |cell| cell.unknown? }.map { |cell| cell.value }
     end
 
     def box_values(box)
-      @boxes[box].reject { |cell| cell.value == '0' }.map { |cell| cell.value }
+      @boxes[box].reject { |cell| cell.unknown? }.map { |cell| cell.value }
     end
 
     def build_grid(grid_def)
-      numbers = grid_def.chars.to_a
+      grid_def.chars.each_with_index { |value, i| @cells[i] = Cell.new(value) }
 
-      @cells = []
-      numbers.each_with_index do |value, i|
-        cell = Cell.new(value)
+      build_rows_columns_and_boxes
+    end
 
+    def build_rows_columns_and_boxes
+      @rows, @columns, @boxes = [], [], []
+
+      @cells.each_with_index do |cell, i|
         row = Sudoku.row_index(i)
         column = Sudoku.column_index(i)
 
-
-        @cells[i] = cell
         create_row_entry row, column, cell
         create_column_entry row, column, cell
         create_box_entry row, column, cell

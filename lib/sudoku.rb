@@ -22,7 +22,8 @@ module Sudoku
 
   def self.solve(puzzle)
     # Make a private copy of the puzzle that we can modify.
-    puzzle = puzzle.dup
+    original = puzzle
+    puzzle = original.dup
     # Use logic to fill in as much of the puzzle as we can.
     # This method mutates the puzzle we give it, but always leaves it valid.
     # It returns a row, a column, and set of possible values at that cell.
@@ -39,8 +40,9 @@ module Sudoku
     # we need to try another guess, or re-raise an exception if we've tried
     # all the options we've got.
     possibilities.each do |possibility|
+      puzzle = original.dup
       possibility.possible_values.each do |guess| # For each value in the set of possible values
-        puzzle.rows[row_with_min_possible_values][column_with_min_possible_values].guess = guess # Guess the value
+        puzzle.rows[possibility.row][possibility.column].guess guess # Guess the value
         begin
           # Now try (recursively) to solve the modified puzzle.
           # This recursive invocation will call scan() again to apply logic
@@ -48,8 +50,8 @@ module Sudoku
           # Remember that solve() will either return a valid solution or
           # raise an exception.
           return solve(puzzle) # If it returns, we just return the solution
-        rescue "This puzzle cannot be solved"
-          next # If it raises an exception, try the next guess
+        rescue
+          # If it raises an exception, try the next guess
         end
       end
     end
@@ -84,8 +86,8 @@ module Sudoku
   # If has_duplicates? is false on entry, then it will be false on exit.
   #
   def self.scan(puzzle)
-    solve_initial(puzzle)
-    find_possibilities
+    solve_initial puzzle
+    find_possibilities puzzle
   end
 
   def self.find_possibilities(puzzle)
@@ -93,9 +95,9 @@ module Sudoku
 
     puzzle.each_unknown do |row, column, box|
       values = puzzle.possible_values_for(row, column, box)
-      possibilities << possibility.new(row, column, values) if value.count > 1
+      possibilities << Possibility.new(row, column, values) if values.count > 1
     end
-    possibilities
+    possibilities.sort { |x, y| x.possible_values.count <=> y.possible_values.count }
   end
 
   def self.solve_initial(puzzle)
@@ -117,5 +119,6 @@ module Sudoku
           unchanged = false
         end
       end
+    end
   end
 end
