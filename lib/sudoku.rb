@@ -39,6 +39,10 @@ module Sudoku
     # puzzle if a recursive call to scan throws an exception. If this happens
     # we need to try another guess, or re-raise an exception if we've tried
     # all the options we've got.
+      
+    puts "Testing #{possibilities.count} possibilities"
+    puts "Testing #{possibilities.reduce(0) { |sum, possibility| sum += possibility.possible_values.count }} possible values"
+    
     possibilities.each do |possibility|
       puzzle = original.dup
       possibility.possible_values.each do |guess| # For each value in the set of possible values
